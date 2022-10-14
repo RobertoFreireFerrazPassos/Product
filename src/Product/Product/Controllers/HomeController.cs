@@ -21,8 +21,7 @@ namespace Product.Controllers
             {
                 Fields = new List<Field>()
                 {
-                    new TextField("Insert your name:"),
-                    new IntField("Insert your age:",0,150)
+                    new TextField("Insert your text:")
                 }
             };
 
@@ -35,7 +34,7 @@ namespace Product.Controllers
             var jsRunnerParams = new JsRunnerParams
             {
                 JavascriptCode = EncapsulteJavascriptCodeInModule(form.Code),
-                JavascriptCodeIdentifier = "CorrectJavascript",
+                JavascriptCodeIdentifier = "jsTestCode" + DateTime.Now.ToString(),
                 Args = new object[] {
                         new {
                             y = form.Values

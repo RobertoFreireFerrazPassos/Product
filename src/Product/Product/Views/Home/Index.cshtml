@@ -31,17 +31,23 @@
     Model.CurrentIndex = Model.CurrentIndex + 1;
 }
 
-<div id="myEditor"></div>
+<div class="input-group mb-3">
+    <div id="myEditor"></div>
+</div>
 
 <div class="input-group mb-3">
     <button type="button" class="btn btn-primary" onclick="sendFormData(@Model.Fields.Count())">Save</button>
 </div> 
 
+<label class="form-label">Result</label>
+<div class="input-group mb-3">
+    <input id="Result" type="text" class="form-control" readonly>
+</div>
 
 
 @section Scripts {
     <script>
-        var javaScriptCode = "input.y[0] = input.y[0] + 'orange';\ninput.y[1] = input.y[1] + 'apple';\n\noutput = input;";
+        var javaScriptCode = "input.y[0] = input.y[0] + ' (testing)';\r\n\r\noutput = input.y;";
 
         YUI().use(
             'aui-ace-editor',
@@ -83,6 +89,7 @@
                 dataType: 'json',
                 contentType: 'application/json'
             }).done(function (resultado) {
+                document.getElementById("Result").value = resultado;
             });
         }
     </script>
