@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+@model FormViewModel
+
+@foreach (var field in Model.Fields)
+{
+    switch (field.Type)
+    {
+        case FieldType.Text:
+            <label class="form-label">@field.Name</label>
+            <div class="input-group mb-3">
+                <input id="@Model.CurrentIndex" type="text" class="form-control">
+            </div>
+            break;
+        case FieldType.Int:
+            var intField = (IntField)field;
+            <label class="form-label">@field.Name</label>
+            <div class="input-group mb-3">
+                <input id="@Model.CurrentIndex"
+                    type="number" 
+                    class="form-control" 
+                    @(intField.Min is not null ? "min=" + @intField.Min : null) 
+                    @(intField.Max is not null ? "max=" + @intField.Max : null)>
+            </div>
+            break;
+        default:
+            break;
+    }
+    Model.CurrentIndex = Model.CurrentIndex + 1;
+}
+
+<div class="input-group mb-3">
+    <button type="button" class="btn btn-primary" onclick="sendFormData(@Model.Fields.Count())">Save</button>
+</div> 
+
+@section Scripts {
+    <script>
+        function sendFormData(count) {
+            var formValues = [];
+
+            for (let i = 0; i < count; i++) {
+                formValues.push(document.getElementById(i).value);
+            }
+            
+            var javaScriptCode = `
+                    input.y[0] = input.y[0] + 'orange';
+                    input.y[1] = input.y[1] + 'apple';
+                    output = input;
+                `;
+
+            var data = {
+                Values : formValues,
+                Code: javaScriptCode
+            }
+
+            $.ajax({
+                url: "/Home/SendFormData",
+                method: "POST",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: 'application/json'
+            }).done(function (resultado) {
+            });
+        }
+    </script>
+}
