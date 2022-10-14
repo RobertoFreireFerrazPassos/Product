@@ -31,24 +31,45 @@
     Model.CurrentIndex = Model.CurrentIndex + 1;
 }
 
+<div id="myEditor"></div>
+
 <div class="input-group mb-3">
     <button type="button" class="btn btn-primary" onclick="sendFormData(@Model.Fields.Count())">Save</button>
 </div> 
 
+
+
 @section Scripts {
     <script>
+        var javaScriptCode = "input.y[0] = input.y[0] + 'orange';\ninput.y[1] = input.y[1] + 'apple';\n\noutput = input;";
+
+        YUI().use(
+            'aui-ace-editor',
+            function (Y) {
+                var editor = new Y.AceEditor(
+                    {
+                        boundingBox: '#myEditor',
+                        height: '200',
+                        mode: 'javascript',
+                        value: javaScriptCode,
+                        width: '700'
+                    }
+                ).render();
+
+                editor.getSession().on('change', function () {
+                    javaScriptCode = editor.getSession().getValue();
+                });
+            }
+        );
+
         function sendFormData(count) {
             var formValues = [];
+
+            console.log();
 
             for (let i = 0; i < count; i++) {
                 formValues.push(document.getElementById(i).value);
             }
-            
-            var javaScriptCode = `
-                    input.y[0] = input.y[0] + 'orange';
-                    input.y[1] = input.y[1] + 'apple';
-                    output = input;
-                `;
 
             var data = {
                 Values : formValues,
